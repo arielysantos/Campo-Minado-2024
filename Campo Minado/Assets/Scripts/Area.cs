@@ -29,4 +29,36 @@ public class Area : MonoBehaviour
         indexI = i;  // Define a posição no eixo X (horizontal)
         indexJ = j;  // Define a posição no eixo Y (vertical)
     }
+
+    // Função chamada ao clicar na célula
+    public void Clicado()
+    {
+        // Se o jogador estiver no modo bandeira, a célula será marcada com uma bandeira
+        if (GameManager.instance.ModoBandeira)
+        {
+            TransformarBandeira();
+        }
+        // Caso contrário, a célula será revelada
+        else
+        {
+            Revelar();
+        }
+    }
+
+    // Função para alternar a presença da bandeira na célula
+    void TransformarBandeira()
+    {
+        // Se a célula não tiver bandeira, coloca uma bandeira
+        if (!bandeira)
+        {
+            bandeira = true;  // Marca a célula com bandeira
+            GetComponent<SpriteRenderer>().sprite = bandeiraSprite;  // Altera o sprite para o de bandeira
+        }
+        // Se a célula já tiver bandeira, remove a bandeira
+        else
+        {
+            bandeira = false;  // Remove a bandeira
+            GetComponent<SpriteRenderer>().sprite = spriteOriginal;  // Restaura o sprite original
+        }
+    }
 }
