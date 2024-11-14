@@ -19,8 +19,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject AreaPrefab; // Prefab da área (a célula do campo minado)
 
+<<<<<<< Updated upstream
     int diametroDoCampo; // O tamanho da grade quadrada do campo
     int numeroDeBombas; // Número total de bombas no campo
+=======
+    ManagerUI managerUI;  // Referência ao gerenciador da interface do usuário
+    GameObject menu, gameOver;  // Referências para os menus de início e Game Over
+    internal int Largura;  // Largura do campo (geralmente igual ao diâmetro)
+    internal int Altura;  // Altura do campo (geralmente igual ao diâmetro)
+    internal static object instance;
+>>>>>>> Stashed changes
 
     bool modoBandeira; // Flag para verificar se o jogador está no modo de bandeira (marcando ou desmarcando bombas)
 
@@ -126,6 +134,18 @@ public class GameManager : MonoBehaviour
     {
         throw new NotImplementedException();
     }
+
+    // Método para checar se o jogador venceu o jogo
+    public void ChecarVitoria()
+    {
+        int quantidadeNaoRevelados = 0;  // Contador para as células não reveladas
+
+        // Laço para percorrer todas as células e contar as não reveladas
+        foreach (Area area in areas)
+        {
+            if (!area.revelado) ;
+
+    }   }
 }
 
 
