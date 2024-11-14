@@ -20,12 +20,18 @@ public class GameManager : MonoBehaviour
 
     // Propriedade para acessar o modo de bandeira (usado por outras partes do código)
     public bool ModoBandeira { get => modoBandeira; }
-    #region Singleton
-    public static GameManager instance;
 
-    private void Awake()
+    // Método para alternar entre o modo de bandeira
+    public void AlterarModoBandeira()
     {
-        instance = this;
+        modoBandeira = !modoBandeira;  // Alterna entre verdadeiro e falso
     }
-    #endregion
+
+    private void Start()
+    {
+        managerUI = GetComponent<ManagerUI>();  // Obtém o componente que gerencia a interface do usuário
+        menu = GameObject.Find("Menu Window");  // Encontra o objeto "Menu Window"
+        gameOver = GameObject.Find("GameOver");  // Encontra o objeto "Game Over"
+    }
+
 }
