@@ -13,4 +13,13 @@ public class Area : MonoBehaviour
     [SerializeField] Sprite bombaSprite, bandeiraSprite, spriteOriginal; // Sprites para bomba, bandeira e célula original
 
     public bool Bomba { get => bomba; set => bomba = value; } // Getter e setter para o campo bomba
+
+    // Função chamada ao iniciar o jogo
+    private void Start()
+    {
+        // Salva o sprite original da célula para poder restaurá-lo mais tarde
+        spriteOriginal = GetComponent<SpriteRenderer>().sprite;
+    }
+
+    // Função para definir a posição (índices) da célula no grid
 }
