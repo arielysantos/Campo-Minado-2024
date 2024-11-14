@@ -22,4 +22,11 @@ public class Area : MonoBehaviour
     }
 
     // Função para definir a posição (índices) da célula no grid
+
+    // Função para definir a posição (índices) da célula no grid
+    public void DefinirIndex(int i, int j)
+    {
+        indexI = i;  // Define a posição no eixo X (horizontal)
+        indexJ = j;  // Define a posição no eixo Y (vertical)
+    }
 }
