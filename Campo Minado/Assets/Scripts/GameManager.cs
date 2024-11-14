@@ -34,4 +34,17 @@ public class GameManager : MonoBehaviour
         gameOver = GameObject.Find("GameOver");  // Encontra o objeto "Game Over"
     }
 
+    // Método para definir o diâmetro do campo (tamanho da grade)
+    public void DefinirDiametro(string value)
+    {
+        diametroDoCampo = int.Parse(value);  // Converte a string para inteiro
+        managerUI.AtualizarBarra((float)numeroDeBombas / (diametroDoCampo * diametroDoCampo));  // Atualiza a barra de progresso
+    }
+
+    // Método para definir o número de bombas no campo
+    public void DefinirNumeroDeBombas(string value)
+    {
+        numeroDeBombas = int.Parse(value);  // Converte a string para inteiro
+        managerUI.AtualizarBarra((float)numeroDeBombas / (diametroDoCampo * diametroDoCampo));  // Atualiza a barra de progresso
+    }
 }
