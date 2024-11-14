@@ -133,4 +133,41 @@ public class GameManager : MonoBehaviour
 
         return quantidadeDeBombas;  // Retorna o número de bombas vizinhas
     }
+
+    // Método para distribuir as bombas no campo de forma aleatória
+    void DistribuirBombas()
+    {
+        int quantidadeDeBombas = 0;  // Variável para contar as bombas distribuídas
+
+        while (quantidadeDeBombas < numeroDeBombas)  // Enquanto o número de bombas distribuídas for menor que o necessário
+        {
+            int[] index = new int[2];  // Array para armazenar o índice da célula aleatória
+
+            // Gera índices aleatórios para as células
+            index[0] = Random.Range(0, diametroDoCampo);  // Índice X (linha)
+            index[1] = Random.Range(0, diametroDoCampo);  // Índice Y (coluna)
+
+            // Se a célula aleatória não tiver bomba, coloca uma bomba nela
+            if (areas[index[0], index[1]].Bomba == false)
+            {
+                areas[index[0], index[1]].Bomba = true;  // Marca a célula com bomba
+                quantidadeDeBombas++;  // Aumenta o contador de bombas distribuídas
+            }
+        }
+    }
+
+    // Método chamado quando o jogo acaba (game over)
+    public void GameOver()
+    {
+        foreach (Area area in areas)  // Laço para percorrer todas as células
+        {
+            if (area.Bomba)  // Se a célula contiver uma bomba
+            {
+                area.RevelarBomba();  // Revela a bomba
+            }
+        }
+
+        gameOver.SetActive(true);  // Ativa a tela de Game Over
+        managerUI.AtualizarTexto(false);  // Atualiza o texto do UI para Game Over
+    }
 }
