@@ -4,121 +4,106 @@ using UnityEngine;
 
 public class Area : MonoBehaviour
 {
-    [SerializeField] bool bomba;  // Indica se a célula contém uma bomba
-    public bool revelado, bandeira; // Se a célula foi revelada ou tem uma bandeira
+    [SerializeField] bool bomba; // Indica se a área contém uma bomba
+    public bool revelado, bandeira; // Flags para verificar se a área foi revelada ou se há uma bandeira
 
-    int indexI, indexJ;  // Índices que representam a posição da célula no grid (tabuleiro)
+    int indexI, indexJ; // Índices para identificar a posição da área na grade
 
-    [SerializeField] Sprite[] spritesVazios; // Sprites usados para células vazias (dependendo do número de bombas ao redor)
-    [SerializeField] Sprite bombaSprite, bandeiraSprite, spriteOriginal; // Sprites para bomba, bandeira e célula original
+    [SerializeField] Sprite[] spritesVazios; // Sprites que representam o número de bombas ao redor, se houver
+    [SerializeField] Sprite bombaSprite, bandeiraSprite, spriteOriginal; // Sprites para bomba, bandeira e o estado original da área
 
-    public bool Bomba { get => bomba; set => bomba = value; } // Getter e setter para o campo bomba
+    // Propriedade para acesso e modificação da variável 'bomba'
+    public bool Bomba { get => bomba; set => bomba = value; }
 
-    // Função chamada ao iniciar o jogo
+    // Método chamado no início para armazenar o sprite original da área
     private void Start()
     {
-        // Salva o sprite original da célula para poder restaurá-lo mais tarde
         spriteOriginal = GetComponent<SpriteRenderer>().sprite;
     }
 
-    // Função para definir a posição (índices) da célula no grid
-
-    // Função para definir a posição (índices) da célula no grid
+    // Define os índices 'i' e 'j' que representam a posição desta área na grade
     public void DefinirIndex(int i, int j)
     {
-        indexI = i;  // Define a posição no eixo X (horizontal)
-        indexJ = j;  // Define a posição no eixo Y (vertical)
+        indexI = i;
+        indexJ = j;
     }
 
-    // Função chamada ao clicar na célula
+    // Método que é chamado quando a área é clicada
     public void Clicado()
     {
-        // Se o jogador estiver no modo bandeira, a célula será marcada com uma bandeira
         if (GameManager.instance.ModoBandeira)
         {
+            // Se o modo bandeira estiver ativado, transforma em bandeira
             TransformarBandeira();
         }
-        // Caso contrário, a célula será revelada
         else
         {
+            // Caso contrário, revela a área
             Revelar();
         }
     }
 
-    // Função para alternar a presença da bandeira na célula
+    // Alterna o estado de bandeira na área (coloca ou remove a bandeira)
     void TransformarBandeira()
     {
-        // Se a célula não tiver bandeira, coloca uma bandeira
         if (!bandeira)
         {
-            bandeira = true;  // Marca a célula com bandeira
-            GetComponent<SpriteRenderer>().sprite = bandeiraSprite;  // Altera o sprite para o de bandeira
+            bandeira = true;
+            // Altera o sprite para a bandeira
+            GetComponent<SpriteRenderer>().sprite = bandeiraSprite;
         }
-        // Se a célula já tiver bandeira, remove a bandeira
         else
         {
-            bandeira = false;  // Remove a bandeira
-            GetComponent<SpriteRenderer>().sprite = spriteOriginal;  // Restaura o sprite original
+            bandeira = false;
+            // Restaura o sprite original
+            GetComponent<SpriteRenderer>().sprite = spriteOriginal;
         }
     }
 
-    // Método para revelar a célula
+    // Revela a área, mostrando o número de bombas ao redor ou a bomba, se for o caso
     void Revelar()
     {
-        // Só revela a célula se ela ainda não foi revelada e não está com bandeira
         if (!revelado && !bandeira)
         {
-            if (bomba)  // Se a célula contém uma bomba, o jogo acaba
+            if (bomba)
             {
-                GameManager.instance.GameOver();  // Chama o GameOver no GameManager
+                // Se houver bomba, o jogo termina
+                GameManager.instance.GameOver();
             }
-            else  // Se a célula não contém bomba, revela o conteúdo
+            else
             {
-                revelado = true;  // Marca a célula como revelada
-                // Atualiza o sprite da célula com o número de bombas ao redor, obtido do GameManager
+                revelado = true;
+                // Mostra o número de bombas ao redor da área
                 GetComponent<SpriteRenderer>().sprite = spritesVazios[GameManager.instance.ChecarEntorno(indexI, indexJ)];
-
-                // Se a célula tem 0 bombas ao redor (uma célula vazia), revela também as vizinhas
-                if (GameManager.instance.ChecarEntorno(indexI, indexJ) == 0)
-                {
-                    RevelarVizinhas(indexI, indexJ);  // Chama o método que revela as células vizinhas
-                }
-
-                GameManager.instance.ChecarVitoria();  // Verifica se o jogador venceu o jogo
+                // Verifica se o jogador ganhou
+                GameManager.instance.ChecarVitoria();
             }
         }
     }
 
-    // Método para revelar as células vizinhas ao redor de uma célula que tem 0 bombas adjacentes
-    void RevelarVizinhas(int i, int j)
-    {
-        // Laço para percorrer as células vizinhas (em uma matriz 3x3 ao redor da célula clicada)
-        for (int di = -1; di <= 1; di++)  // Laço para as linhas vizinhas (-1, 0, +1)
-        {
-            for (int dj = -1; dj <= 1; dj++)  // Laço para as colunas vizinhas (-1, 0, +1)
-            {
-                int novoI = i + di;  // Calcula o novo índice X (linha)
-                int novoJ = j + dj;  // Calcula o novo índice Y (coluna)
-
-                // Verifica se a célula vizinha está dentro dos limites do campo de jogo
-                if (novoI >= 0 && novoI < GameManager.instance.Largura && novoJ >= 0 && novoJ < GameManager.instance.Altura)
-                {
-                    Area vizinha = GameManager.instance.GetArea(novoI, novoJ);  // Obtém a referência para a célula vizinha
-
-                    // Só revela a célula vizinha se ela ainda não foi revelada e não estiver com bandeira
-                    if (!vizinha.revelado && !vizinha.bandeira)
-                    {
-                        vizinha.Revelar();  // Revela a célula vizinha (recursivamente chama Revelar)
-                    }
-                }
-            }
-        }
-    }
-
-    // Método para revelar uma célula que contém uma bomba
+    // Revela a área como uma bomba (usado para mostrar a bomba ao final do jogo)
     public void RevelarBomba()
     {
-        revelado = true;  // Marca a célula como revelada
-        GetComponent<SpriteRenderer>().sprite = bombaSprite;  // Atualiza o sprite para o da bomba
+        revelado = true;
+        // Altera o sprite para o sprite de bomba
+        GetComponent<SpriteRenderer>().sprite = bombaSprite;
+    }
+
+    // Método de retorno para verificar se a área contém uma bomba
+    public bool RetornarBomba()
+    {
+        return bomba; // Retorna o valor da variável 'bomba'
+    }
+
+    // Método de retorno para verificar se a área foi revelada
+    public bool RetornarRevelado()
+    {
+        return revelado; // Retorna o valor da variável 'revelado'
+    }
+
+    // Método de retorno para verificar se a área contém uma bandeira
+    public bool RetornarBandeira()
+    {
+        return bandeira; // Retorna o valor da variável 'bandeira'
     }
 }
