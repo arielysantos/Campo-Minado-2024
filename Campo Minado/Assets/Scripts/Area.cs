@@ -114,4 +114,11 @@ public class Area : MonoBehaviour
             }
         }
     }
+
+    // Método para revelar uma célula que contém uma bomba
+    public void RevelarBomba()
+    {
+        revelado = true;  // Marca a célula como revelada
+        GetComponent<SpriteRenderer>().sprite = bombaSprite;  // Atualiza o sprite para o da bomba
+    }
 }
