@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     ManagerUI managerUI;
     GameObject menu, gameOver;
+    internal int Largura;
+    internal int Altura;
 
     public bool ModoBandeira { get => modoBandeira; }
 
@@ -175,5 +177,10 @@ public class GameManager : MonoBehaviour
             gameOver.SetActive(true);
             managerUI.AtualizarTexto(true);
         }
+    }
+
+    internal Area GetArea(int novoI, int novoJ)
+    {
+        throw new System.NotImplementedException();
     }
 }
