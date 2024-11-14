@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     GameObject menu, gameOver;  // Referências para os menus de início e Game Over
     internal int Largura;  // Largura do campo (geralmente igual ao diâmetro)
     internal int Altura;  // Altura do campo (geralmente igual ao diâmetro)
+    internal static object instance;
 
     // Propriedade para acessar o modo de bandeira (usado por outras partes do código)
     public bool ModoBandeira { get => modoBandeira; }
