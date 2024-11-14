@@ -72,4 +72,65 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    // Método para gerar o campo minado
+    public void GerarCampoMinado()
+    {
+        if (numeroDeBombas < Mathf.Pow(diametroDoCampo, 2))  // Verifica se o número de bombas é menor que o total de células
+        {
+            areas = new Area[diametroDoCampo, diametroDoCampo];  // Cria a matriz de células
+
+            // Laço para percorrer todas as células e instanciá-las
+            for (int i = 0; i < diametroDoCampo; i++)
+            {
+                for (int j = 0; j < diametroDoCampo; j++)
+                {
+                    Area area = Instantiate(AreaPrefab, new Vector2(i, j), Quaternion.identity).GetComponent<Area>();  // Cria a célula
+                    area.DefinirIndex(i, j);  // Define o índice da célula
+                    areas[i, j] = area;  // Adiciona a célula à matriz
+                }
+            }
+        }
+    }
+
+    // Método para checar o entorno de uma célula e contar as bombas vizinhas
+    public int ChecarEntorno(int x, int y)
+    {
+        int quantidadeDeBombas = 0;  // Variável para contar o número de bombas vizinhas
+
+        // Laços para percorrer as 8 células vizinhas (ao redor de x, y)
+        for (int i = -1; i < 2; i++)  // Laço para as linhas vizinhas (-1, 0, +1)
+        {
+            for (int j = -1; j < 2; j++)  // Laço para as colunas vizinhas (-1, 0, +1)
+            {
+                // Verifica se a célula vizinha está dentro dos limites do campo
+                if (x + i < diametroDoCampo && y + j < diametroDoCampo && x + i >= 0 && y + j >= 0)
+                {
+                    // Se a célula vizinha tiver uma bomba, aumenta o contador
+                    if (areas[x + i, y + j].Bomba)
+                    {
+                        quantidadeDeBombas++;
+                    }
+                }
+            }
+        }
+
+        // Se não houver bombas ao redor (quantidadeDeBombas == 0), revela as células vizinhas
+        if (quantidadeDeBombas == 0)
+        {
+            for (int i = -1; i < 2; i++)  // Laço para percorrer as células vizinhas
+            {
+                for (int j = -1; j < 2; j++)  // Laço para percorrer as células vizinhas
+                {
+                    // Verifica se a célula vizinha está dentro dos limites do campo
+                    if (x + i < diametroDoCampo && y + j < diametroDoCampo && x + i >= 0 && y + j >= 0)
+                    {
+                        areas[x + i, y + j].Clicado();  // Chama o método Clicado() nas células vizinhas
+                    }
+                }
+            }
+        }
+
+        return quantidadeDeBombas;  // Retorna o número de bombas vizinhas
+    }
 }
