@@ -4,75 +4,13 @@ using UnityEngine;
 
 public class Area : MonoBehaviour
 {
-    [SerializeField] bool bomba;
-    public bool revelado, bandeira;
+    [SerializeField] bool bomba;  // Indica se a célula contém uma bomba
+    public bool revelado, bandeira; // Se a célula foi revelada ou tem uma bandeira
 
-    int indexI, indexJ;
+    int indexI, indexJ;  // Índices que representam a posição da célula no grid (tabuleiro)
 
+    [SerializeField] Sprite[] spritesVazios; // Sprites usados para células vazias (dependendo do número de bombas ao redor)
+    [SerializeField] Sprite bombaSprite, bandeiraSprite, spriteOriginal; // Sprites para bomba, bandeira e célula original
 
-
-    [SerializeField] Sprite[] spritesVazios;
-    [SerializeField] Sprite bombaSprite, bandeiraSprite, spriteOriginal;
-
-    public bool Bomba { get => bomba; set => bomba = value; }
-
-    private void Start()
-    {
-        spriteOriginal = GetComponent<SpriteRenderer>().sprite;
-    }
-
-    public void DefinirIndex(int i, int j)
-    {
-        indexI = i;
-        indexJ = j;
-    }
-
-    public void Clicado()
-    {
-        if (GameManager.instance.ModoBandeira)
-        {
-            TransformarBandeira();
-        }
-        else
-        {
-            Revelar();
-        }
-    }
-
-    void TransformarBandeira()
-    {
-        if (!bandeira)
-        {
-            bandeira = true;
-            GetComponent<SpriteRenderer>().sprite = bandeiraSprite;
-        }
-        else
-        {
-            bandeira = false;
-            GetComponent<SpriteRenderer>().sprite = spriteOriginal;
-        }
-    }
-
-    void Revelar()
-    {
-        if (!revelado && !bandeira)
-        {
-            if (bomba)
-            {
-                GameManager.instance.GameOver();
-            }
-            else
-            {
-                revelado = true;
-                GetComponent<SpriteRenderer>().sprite = spritesVazios[GameManager.instance.ChecarEntorno(indexI, indexJ)];
-                GameManager.instance.ChecarVitoria();
-            }
-        }
-    }
-
-    public void RevelarBomba()
-    {
-        revelado = true;
-        GetComponent<SpriteRenderer>().sprite = bombaSprite;
-    }
+    public bool Bomba { get => bomba; set => bomba = value; } // Getter e setter para o campo bomba
 }
