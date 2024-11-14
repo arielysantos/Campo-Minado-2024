@@ -47,4 +47,29 @@ public class GameManager : MonoBehaviour
         numeroDeBombas = int.Parse(value);  // Converte a string para inteiro
         managerUI.AtualizarBarra((float)numeroDeBombas / (diametroDoCampo * diametroDoCampo));  // Atualiza a barra de progresso
     }
+
+    // Método para iniciar o jogo
+    public void IniciarJogo()
+    {
+        ExcluirCampo();  // Exclui qualquer campo existente antes de gerar um novo
+        GerarCampoMinado();  // Gera o novo campo minado
+        Camera.main.transform.position = new Vector3(diametroDoCampo / 2f - 0.5f, diametroDoCampo / 2f - 0.5f, -10);  // Ajusta a câmera
+        Camera.main.orthographicSize = diametroDoCampo / 2f;  // Ajusta o tamanho da câmera
+
+        DistribuirBombas();  // Distribui as bombas no campo
+        menu.SetActive(false);  // Desativa o menu inicial
+        gameOver.SetActive(false);  // Desativa o menu de game over
+    }
+
+    // Método para excluir o campo existente
+    void ExcluirCampo()
+    {
+        if (areas != null)  // Verifica se o campo já existe
+        {
+            foreach (Area area in areas)  // Laço para percorrer todas as células do campo
+            {
+                Destroy(area.gameObject);  // Destroi o objeto de cada célula
+            }
+        }
+    }
 }
